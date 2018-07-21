@@ -72,7 +72,8 @@
 				e.preventDefault();
 				if (this.new_user.name.length < 4 || this.new_user.email.length < 4) { this.form_error = true; }
 				else {
-					this.users.push({name: this.new_user.name, email: this.new_user.email, contacted: this.new_user.contacted});
+					// this.users.push({name: this.new_user.name, email: this.new_user.email, contacted: this.new_user.contacted});
+					this.users.push({...this.new_user})
 					this.new_user.name = "";
 					this.new_user.email = "";
 					this.form_error = false;
@@ -80,8 +81,17 @@
 			},
 			deleteUser: function(user) {
 				this.users.splice(user,1);
+			},
+			addData: function(data) {
+				data.forEach(item => this.users.push({name: item.name, email: item.email, contacted: false}));
 			}
-        },
+		},
+		created: function() {
+			this.$http.get("https://jsonplaceholder.typicode.com/users").then(function(res){
+				const data = res.body;
+				this.addData(data);
+			});
+		}
     }
 </script>
 
